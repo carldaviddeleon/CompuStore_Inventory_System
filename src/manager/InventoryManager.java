@@ -26,6 +26,18 @@ public class InventoryManager {
             return false;
         }
     }
+    
+    public boolean isDuplicateName(String name, String excludeId) {
+    for (Product p : productList) {
+        if (excludeId != null && p.getId().equalsIgnoreCase(excludeId)) {
+            continue;
+        }
+        if (p.getName().equalsIgnoreCase(name.trim())) {
+            return true;
+        }
+    }
+    return false;
+}
 
     public boolean isDuplicateId(String id){
         return findBySku(id) != null;

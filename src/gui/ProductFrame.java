@@ -314,8 +314,13 @@ public class ProductFrame extends JFrame implements ActionListener {
                 Integer.parseInt(txtQty.getText().trim()));
     }
 
-    private void addProduct(){
+    private void addProduct(){     
         if(!validateInputs()) return;
+        String productName = txtName.getText().trim();
+            if (inventoryManager.isDuplicateName(productName, null)) {
+        JOptionPane.showMessageDialog(this, "Product name already exists!", "Duplicate", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
         if(inventoryManager.isDuplicateId(txtId.getText().trim())){
             Style.warn(this, "Product ID already exists. Click Clear to make a new ID.");
             return;
@@ -335,6 +340,12 @@ public class ProductFrame extends JFrame implements ActionListener {
             return;
         }
         if(!validateInputs()) return;
+        String id = txtId.getText().trim();
+        String productName = txtName.getText().trim();
+            if (inventoryManager.isDuplicateName(productName, id)) {
+        JOptionPane.showMessageDialog(this, "Product name already exists!", "Duplicate", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
         if(inventoryManager.updateProduct(makeProductFromFields())){
             Style.info(this, "Product updated successfully");
             loadTable();
