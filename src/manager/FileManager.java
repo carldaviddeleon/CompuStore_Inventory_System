@@ -3,7 +3,7 @@ package manager;
 import model.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.*;
 
 
 public class FileManager {
@@ -51,6 +51,18 @@ public class FileManager {
         }catch(NumberFormatException e){
             System.out.println("Skipped a bad line: " + line);
             return null;
+        }
+    }
+    
+    public static void saveDeletedToFile(Product p){
+        try{
+            FileWriter fw = new FileWriter("deleted_products.txt", true);
+            fw.write("Deleted on: " + java.time.LocalDateTime.now() + "\n");
+            fw.write("ID: " + p.getId() + ", Name: " + p.getName() + ", Category: " + p.getCategory() + ", Brand: " + p.getBrand() + ", Price: " + p.getPrice() + ", Qty: " + p.getQty() + "\n");
+            fw.write("----------------------------------------\n");
+            fw.close();
+        }catch(Exception e){
+            System.out.println("Hindi ma-save yung deleted: " + e.getMessage());
         }
     }
 

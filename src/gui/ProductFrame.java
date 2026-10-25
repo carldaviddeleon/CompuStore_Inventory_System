@@ -194,7 +194,7 @@ public class ProductFrame extends JFrame implements ActionListener {
         btnSearch = Style.makeButton("Search", 'S', "Click to search (Alt+S)", Style.BLUE);
         btnRefresh = Style.makeButton("Refresh", 'R', "Click to show all products again (Alt+R)", Style.GRAY);
         btnBack = Style.makeButton("Back", 'B', "Click to go back to the dashboard (Alt+B)", Style.GRAY);
-        btnEditCategory = Style.makeButton("Edit Categories", 'E', "Click to Edit Categories", Color.BLUE);
+        btnEditCategory = Style.makeButton("Edit Categories", 'E', "Click to Edit Categories (Alt+E)", Color.BLUE);
     }
 
     private JPanel makeButtonPanel(){

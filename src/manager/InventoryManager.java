@@ -2,6 +2,7 @@ package manager;
 
 import model.Product;
 import java.util.ArrayList;
+import java.io.FileWriter;
 
 public class InventoryManager {
 
@@ -69,6 +70,7 @@ public class InventoryManager {
         try{
             Product p = findBySku(id);
             if(p == null) return false;
+            FileManager.saveDeletedToFile(p);
             productList.remove(p);
             return saveToFile();
         }catch(Exception e){
