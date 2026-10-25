@@ -54,10 +54,11 @@ public class FileManager {
         }
     }
     
-    public static void saveDeletedToFile(Product p){
+    public static void saveDeletedToFile(Product p, String deletedBy){
         try{
             FileWriter fw = new FileWriter("deleted_products.txt", true);
             fw.write("Deleted on: " + java.time.LocalDateTime.now() + "\n");
+            fw.write("Deleted by: " + deletedBy + "\n");
             fw.write("ID: " + p.getId() + ", Name: " + p.getName() + ", Category: " + p.getCategory() + ", Brand: " + p.getBrand() + ", Price: " + p.getPrice() + ", Qty: " + p.getQty() + "\n");
             fw.write("----------------------------------------\n");
             fw.close();

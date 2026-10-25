@@ -468,7 +468,7 @@ public class ProductFrame extends JFrame implements ActionListener {
         if(choice != JOptionPane.YES_OPTION) return;
         if(!askAdminPassword()) return;
 
-        if(inventoryManager.deleteProduct(txtId.getText().trim())){
+        if(inventoryManager.deleteProduct(txtId.getText().trim(),currentUser.getUsername().trim())){
             Style.info(this, "Product deleted successfully");
             loadTable();
             clearFields();

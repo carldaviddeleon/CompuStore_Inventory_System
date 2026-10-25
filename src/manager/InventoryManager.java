@@ -66,11 +66,11 @@ public class InventoryManager {
         }
     }
 
-    public boolean deleteProduct(String id){
+    public boolean deleteProduct(String id, String deletedBy){
         try{
             Product p = findBySku(id);
             if(p == null) return false;
-            FileManager.saveDeletedToFile(p);
+            FileManager.saveDeletedToFile(p, deletedBy);
             productList.remove(p);
             return saveToFile();
         }catch(Exception e){
