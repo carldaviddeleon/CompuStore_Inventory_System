@@ -4,6 +4,7 @@ import manager.*;
 import model.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 
 public class DashboardFrame extends JFrame implements ActionListener {
 
@@ -26,6 +26,7 @@ public class DashboardFrame extends JFrame implements ActionListener {
     private JLabel lblTotalProducts;
     private JLabel lblTotalStock;
     private DefaultTableModel lowModel;
+    private JTable lowTable;
     private JTextField txtStockId;
     private JTextField txtStockQty;
 
@@ -175,7 +176,7 @@ public class DashboardFrame extends JFrame implements ActionListener {
     }
 
     private JPanel makeStockPanel(){
-        txtStockId = Style.makeField("Product ID *", "Enter the Product ID, for example P001");
+        txtStockId = Style.makeField("Product ID *", "Enter the Product ID, for example 4001");
         txtStockQty = Style.makeField("Quantity *", "Enter the quantity (whole number, greater than 0)");
         txtStockId.setPreferredSize(new Dimension(170, 50));
         txtStockQty.setPreferredSize(new Dimension(130, 50));
@@ -190,16 +191,34 @@ public class DashboardFrame extends JFrame implements ActionListener {
     }
 
     private JPanel makeLowStockPanel(){
-        lowModel = new DefaultTableModel(new String[]{"ID", "Name", "Qty", "Status"}, 0);
-        JTable lowTable = new JTable(lowModel);
-        Style.styleTable(lowTable);
+    lowModel = new DefaultTableModel(new String[]{"ID", "Name", "Qty", "Status"}, 0);
+    lowTable = new JTable(lowModel);
+    Style.styleTable(lowTable);
 
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
-        panel.setBorder(BorderFactory.createTitledBorder("Low Stock Report (Qty <= " + Product.LOW_STOCK_LEVEL + ")"));
-        panel.add(new JScrollPane(lowTable), BorderLayout.CENTER);
-        return panel;
-    }
+    lowTable.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+            String status = "";
+            if (value != null) status = value.toString();
+            if (status.equals("In Stock")) {
+                c.setBackground(Color.GREEN);
+            } else if (status.equals("Low Stock")) {
+                c.setBackground(Color.YELLOW);
+            } else if (status.equals("Out of Stock")) {
+                c.setBackground(Color.RED);
+            } else {
+                c.setBackground(Color.WHITE);
+            }
+            return c;
+        }
+    });
+
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.setBackground(Color.WHITE);
+    panel.setBorder(BorderFactory.createTitledBorder("Low Stock Report (Qty <= " + Product.LOW_STOCK_LEVEL + ")"));
+    panel.add(new JScrollPane(lowTable), BorderLayout.CENTER);
+    return panel;
+}
 
     private void addEvents(){
         btnProducts.addActionListener(this);
@@ -294,7 +313,6 @@ public class DashboardFrame extends JFrame implements ActionListener {
         }
         return p;
     }
-
 
     private void showReceipt(String type, Product p, int previousStock, int qty){
         Receipt receipt = makeReceipt(type, p, previousStock, qty);

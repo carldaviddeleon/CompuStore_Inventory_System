@@ -6,10 +6,10 @@ import model.Product;
 import model.User;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
 
 public class ProductFrame extends JFrame implements ActionListener {
 
@@ -33,9 +33,12 @@ public class ProductFrame extends JFrame implements ActionListener {
     private JButton btnSearch;
     private JButton btnRefresh;
     private JButton btnBack;
+    private JButton btnEditCategory;
 
     private JTable table;
     private DefaultTableModel tableModel;
+    
+    ArrayList <String> categories = new ArrayList<>();
 
     public ProductFrame(InventoryManager inventoryManager, UserManager userManager, User user, DashboardFrame dashboard){
         this.inventoryManager = inventoryManager;
@@ -76,7 +79,7 @@ public class ProductFrame extends JFrame implements ActionListener {
     }
 
     private JPanel makeFieldsPanel(){
-        txtId = Style.makeField("Product ID *", "Auto-numbered ID like P001 (you cannot type here)");
+        txtId = Style.makeField("Product ID *", "Auto-numbered ID like 4001 (you cannot type here)");
         txtId.setEditable(false);
         txtName = Style.makeField("Product Name *", "Enter the product name");
         txtBrand = Style.makeField("Brand *", "Enter the brand name");
@@ -97,11 +100,89 @@ public class ProductFrame extends JFrame implements ActionListener {
     }
 
     private void makeCategoryCombo(){
-    String[] categories = {"Laptop", "Accessories", "Peripherals", "Components"};
-    cbCategory = new JComboBox<>(categories);
-    cbCategory.setBorder(BorderFactory.createTitledBorder("Category *"));
-    cbCategory.setToolTipText("Select the product category");
-}
+        categories.clear();
+        categories.add("Laptop");
+        categories.add("Accessories");
+        categories.add("Peripherals");
+        categories.add("Components"); // fixed typo
+        
+        cbCategory = new JComboBox<>(categories.toArray(new String[0]));
+        cbCategory.setBorder(BorderFactory.createTitledBorder("Category *"));
+        cbCategory.setToolTipText("Select the product category");   
+    }
+    
+    private void editCategory(){
+        JDialog dialog = new JDialog(this, "Edit Categories", true);
+        dialog.setSize(360, 320);
+        dialog.setLocationRelativeTo(this);
+        dialog.setResizable(false);
+        dialog.setLayout(new GridLayout(5, 1, 5, 5));
+        ((JPanel) dialog.getContentPane()).setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        final JComboBox<String> cbList = new JComboBox<>(categories.toArray(new String[0]));
+        cbList.setBorder(BorderFactory.createTitledBorder("Select Category"));
+
+        final JTextField txtNew = new JTextField();
+        txtNew.setBorder(BorderFactory.createTitledBorder("New Category Name"));
+
+       JButton btnAdd = new JButton("Add");
+       JButton btnUpdate = new JButton("Update");
+       JButton btnRemove = new JButton("Remove");
+
+       dialog.add(cbList);
+       dialog.add(txtNew);
+       dialog.add(btnAdd);
+       dialog.add(btnUpdate);
+       dialog.add(btnRemove);
+
+       btnAdd.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               String cat = txtNew.getText().trim();
+               if (cat.isEmpty()) { Style.warn(dialog, "Empty!"); return; }
+               for (String c : categories) if (c.equalsIgnoreCase(cat)) { Style.warn(dialog, "Already exists."); return; }
+               categories.add(cat);
+               cbCategory.addItem(cat);
+               cbList.addItem(cat);
+               cbList.setSelectedItem(cat);
+               txtNew.setText("");
+               Style.info(dialog, "Added!");
+            }
+        });
+
+       btnUpdate.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               String oldCat = (String) cbList.getSelectedItem();
+               String newCat = txtNew.getText().trim();
+               if (oldCat == null || newCat.isEmpty()) { Style.warn(dialog, "Select and type new name."); return; }
+               for (String c : categories) if (c.equalsIgnoreCase(newCat) && !c.equalsIgnoreCase(oldCat)) { Style.warn(dialog, "Already exists."); return; }
+
+               categories.set(categories.indexOf(oldCat), newCat);
+               cbCategory.removeItem(oldCat);
+               cbCategory.addItem(newCat);
+               cbList.removeItem(oldCat);
+               cbList.addItem(newCat);
+               inventoryManager.updateProductCategory(oldCat, newCat);
+               loadTable();
+               Style.info(dialog, "Updated!");
+            }
+        });
+
+        btnRemove.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String cat = (String) cbList.getSelectedItem();
+                if (cat == null) return;
+                if (inventoryManager.isCategoryInUse(cat)) { Style.warn(dialog, "May product pa na gumagamit."); return; }
+                if (JOptionPane.showConfirmDialog(dialog, "Remove " + cat + "?") == JOptionPane.YES_OPTION) {
+                    categories.remove(cat);
+                    cbCategory.removeItem(cat);
+                    cbList.removeItem(cat);
+                    Style.info(dialog, "Removed!");
+                }
+            }
+        });
+
+         dialog.setVisible(true);
+    }
 
     private void makeButtons(){
         btnAdd = Style.makeButton("Add", 'A', "Click to add a new product (Alt+A)", Style.BLUE);
@@ -113,6 +194,7 @@ public class ProductFrame extends JFrame implements ActionListener {
         btnSearch = Style.makeButton("Search", 'S', "Click to search (Alt+S)", Style.BLUE);
         btnRefresh = Style.makeButton("Refresh", 'R', "Click to show all products again (Alt+R)", Style.GRAY);
         btnBack = Style.makeButton("Back", 'B', "Click to go back to the dashboard (Alt+B)", Style.GRAY);
+        btnEditCategory = Style.makeButton("Edit Categories", 'E', "Click to Edit Categories", Color.BLUE);
     }
 
     private JPanel makeButtonPanel(){
@@ -127,23 +209,42 @@ public class ProductFrame extends JFrame implements ActionListener {
         panel.add(btnSearch);
         panel.add(btnRefresh);
         panel.add(btnBack);
+        panel.add(btnEditCategory);
         return panel;
     }
 
     private JPanel makeTablePanel(){
-        String[] columns = {"ID", "Name", "Category", "Brand", "Price", "Qty", "Status"};
-        tableModel = new DefaultTableModel(columns, 0);
-        table = new JTable(tableModel);
-        Style.styleTable(table);
-        table.getColumnModel().getColumn(1).setPreferredWidth(300);
-        table.setToolTipText("Click a row to show it in the fields above");
+    String[] columns = {"ID", "Name", "Category", "Brand", "Price", "Qty", "Status"};
+    tableModel = new DefaultTableModel(columns, 0);
+    table = new JTable(tableModel);
+    Style.styleTable(table);
+    table.getColumnModel().getColumn(1).setPreferredWidth(300);
+    table.setToolTipText("Click a row to show it in the fields above");
 
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Style.BACKGROUND);
-        panel.setBorder(BorderFactory.createEmptyBorder(5, 20, 20, 20));
-        panel.add(new JScrollPane(table), BorderLayout.CENTER);
-        return panel;
-    }
+    table.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+            String status = "";
+            if (value != null) status = value.toString();
+            if (status.equals("In Stock")) {
+                c.setBackground(Color.GREEN);
+            } else if (status.equals("Low Stock")) {
+                c.setBackground(Color.YELLOW);
+            } else if (status.equals("Out of Stock")) {
+                c.setBackground(Color.RED);
+            } else {
+                c.setBackground(Color.WHITE);
+            }
+            return c;
+        }
+    });
+
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.setBackground(Style.BACKGROUND);
+    panel.setBorder(BorderFactory.createEmptyBorder(5, 20, 20, 20));
+    panel.add(new JScrollPane(table), BorderLayout.CENTER);
+    return panel;
+}
 
     private void addEvents(){
         btnAdd.addActionListener(this);
@@ -154,6 +255,7 @@ public class ProductFrame extends JFrame implements ActionListener {
         txtSearch.addActionListener(this);
         btnRefresh.addActionListener(this);
         btnBack.addActionListener(this);
+        btnEditCategory.addActionListener(this);
 
         table.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
@@ -172,6 +274,7 @@ public class ProductFrame extends JFrame implements ActionListener {
             btnAdd.setEnabled(false);
             btnUpdate.setEnabled(false);
             btnDelete.setEnabled(false);
+            btnEditCategory.setEnabled(false);
         }
     }
 
@@ -183,6 +286,7 @@ public class ProductFrame extends JFrame implements ActionListener {
         else if(e.getSource() == btnSearch || e.getSource() == txtSearch) searchProduct();
         else if(e.getSource() == btnRefresh) refreshTable();
         else if(e.getSource() == btnBack) dispose();
+        else if(e.getSource() == btnEditCategory) editCategory();
     }
 
     private void autoGenerateId(){

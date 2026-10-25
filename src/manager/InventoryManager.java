@@ -3,7 +3,6 @@ package manager;
 import model.Product;
 import java.util.ArrayList;
 
-
 public class InventoryManager {
 
     private ArrayList<Product> productList;
@@ -28,16 +27,16 @@ public class InventoryManager {
     }
     
     public boolean isDuplicateName(String name, String excludeId) {
-    for (Product p : productList) {
-        if (excludeId != null && p.getId().equalsIgnoreCase(excludeId)) {
-            continue;
+        for (Product p : productList) {
+            if (excludeId != null && p.getId().equalsIgnoreCase(excludeId)) {
+                continue;
+            }
+            if (p.getName().equalsIgnoreCase(name.trim())) {
+                return true;
+            }
         }
-        if (p.getName().equalsIgnoreCase(name.trim())) {
-            return true;
-        }
+        return false;
     }
-    return false;
-}
 
     public boolean isDuplicateId(String id){
         return findBySku(id) != null;
@@ -141,14 +140,31 @@ public class InventoryManager {
         return result;
     }
 
-
     public String generateNextId(){
         int number = productList.size() + 1;
-        String id = String.format("P%03d", number);
+        String id = String.format("4%03d", number);
         while(findBySku(id) != null){
             number++;
-            id = String.format("P%03d", number);
+            id = String.format("4%03d", number);
         }
         return id;
+    }
+
+    public boolean isCategoryInUse(String category) {
+        for (Product p : productList) {
+            if (p.getCategory().equalsIgnoreCase(category)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void updateProductCategory(String oldCat, String newCat) {
+        for (Product p : productList) {
+            if (p.getCategory().equalsIgnoreCase(oldCat)) {
+                p.setCategory(newCat);
+            }
+        }
+        saveToFile();
     }
 }
