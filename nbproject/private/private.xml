@@ -2,25 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/model/Product.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/Main.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/model/User.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/model/Admin.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/model/Staff.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/manager/InventoryManager.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/manager/FileManager.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/gui/ProductFrame.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/manager/InputValidator.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/gui/LoginFrame.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/gui/SignUpFrame.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/gui/ChangePasswordFrame.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/gui/DashboardFrame.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/gui/Style.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/gui/UsersFrame.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/model/Receipt.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/gui/ReceiptDialog.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/CompuStore/src/manager/UserManager.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

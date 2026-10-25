@@ -230,10 +230,6 @@ public class DashboardFrame extends JFrame implements ActionListener {
 
     private void setPermissions(){
         if(!currentUser.canEdit()){
-            btnStockIn.setEnabled(false);
-            btnStockOut.setEnabled(false);
-            txtStockId.setEnabled(false);
-            txtStockQty.setEnabled(false);
             itemUsers.setEnabled(false);
         }
     }
@@ -267,6 +263,9 @@ public class DashboardFrame extends JFrame implements ActionListener {
     }
 
     private void doStockIn(){
+        if (!currentUser.canEdit()) {
+        if (!askAdminPermission()) return;
+    }
         if(!validateStockInputs()) return;
         int qty = readQuantity();
         if(qty == -1) return;
@@ -287,6 +286,9 @@ public class DashboardFrame extends JFrame implements ActionListener {
     }
 
     private void doStockOut(){
+        if (!currentUser.canEdit()) {
+        if (!askAdminPermission()) return;
+    }
         if(!validateStockInputs()) return;
         int qty = readQuantity();
         if(qty == -1) return;
@@ -304,6 +306,24 @@ public class DashboardFrame extends JFrame implements ActionListener {
         }
         showReceipt("STOCK OUT", p, previousStock, qty);
         finishStock();
+    }
+    
+    private boolean askAdminPermission() {
+        JPasswordField pf = new JPasswordField();
+        int result = JOptionPane.showConfirmDialog(this, pf, 
+            "Admin permission needed - Enter Admin Password", 
+            JOptionPane.OK_CANCEL_OPTION);
+
+        if (result != JOptionPane.OK_OPTION) return false;
+
+        String entered = new String(pf.getPassword());
+
+        if (entered.equals("admin123")) {
+        return true;
+        }
+
+       Style.warn(this, "Wrong admin password!");
+        return false;
     }
 
     private Product findStockProduct(){
