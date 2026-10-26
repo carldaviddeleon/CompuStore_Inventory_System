@@ -4,7 +4,7 @@ package model;
 public class Product {
 
     public static final int LOW_STOCK_LEVEL = 5;
-    public static final int MAX_QTY = 1000;
+    public static final int MAX_QTY = 10000;
 
     private String id;
     private String name;

@@ -1,0 +1,12 @@
+Deleted on: 2026-10-26T12:33:55.068334100
+Deleted by: admin
+ID: 4016, Name: Ryzen 5, Category: Peripherals, Brand: Lenovo, Price: 2500.0, Qty: 2
+----------------------------------------
+Deleted on: 2026-10-26T16:30:51.067310600
+Deleted by: admin
+ID: 4016, Name: mloong, Category: Laptop, Brand: mloong, Price: 1.0, Qty: 1
+----------------------------------------
+Deleted on: 2026-10-26T17:45:03.079367
+Deleted by: admin
+ID: 4015, Name: WD Elements 1TB Portable External HDD, Category: Peripherals, Brand: WD, Price: 5499.0, Qty: 9
+----------------------------------------

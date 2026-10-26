@@ -171,7 +171,7 @@ public class ProductFrame extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 String cat = (String) cbList.getSelectedItem();
                 if (cat == null) return;
-                if (inventoryManager.isCategoryInUse(cat)) { Style.warn(dialog, "May product pa na gumagamit."); return; }
+                if (inventoryManager.isCategoryInUse(cat)) { Style.warn(dialog, "There are still products that use it.."); return; }
                 if (JOptionPane.showConfirmDialog(dialog, "Remove " + cat + "?") == JOptionPane.YES_OPTION) {
                     categories.remove(cat);
                     cbCategory.removeItem(cat);

@@ -1,10 +1,10 @@
 4001,Lenovo IdeaPad Slim 3 15 inch Ryzen 5,Laptop,Lenovo,39995.0,8
-4002,Acer Aspire Lite 15,Laptop,Acer,29999.0,3
+4002,Acer Aspire Lite 15,Laptop,Acer,29999.0,18
 4003,Asus Vivobook Go 15,Laptop,Asus,27999.0,10
 4004,Logitech M170 Wireless Mouse,Accessories,Logitech,599.0,40
 4005,Logitech M120 Wired Keyboard,Accessories,Logitech,549.0,30
 4006,A4Tech OP-620D Optional Mouse,Accessories,A4Tech,249.0,50
-4007,Havit H2002d Gaming Headset,Accessories,Havit,799.0,4
+4007,Havit H2002d Gaming Headset,Accessories,Havit,799.0,5
 4008,SanDisk Cruzer Blade 64GB USB Flash Drive,Accessories,SanDisk,349.0,60
 4009,Kingston NV3 500GB M.2 NVMe SSD,Components,Kingston,6900.0,18
 4010,Kingston FURY Beast 8GB DDR4 3200 MHz RAM,Components,Kingston,5900.0,15
@@ -12,4 +12,4 @@
 4012,ViewSonic VA2432 24 inch Monitor,Peripherals,ViewSonic,6999.0,12
 4013,Epson EcoTank L3210 Printer,Peripherals,Epson,9995.0,0
 4014,TP-Link Archer C6 AC1200 Wi-Fi Router,Peripherals,TP-Link,1999.0,14
-4015,WD Elements 1TB Portable External HDD,Peripherals,WD,5499.0,9
+4016,Skyshiu mouse,Accessories,skyshiu,500.5,28

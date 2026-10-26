@@ -31,12 +31,9 @@ public abstract class User {
     public void setBlocked(boolean blocked){
         this.isBlocked = blocked;
     }
+    
+    public abstract String getRole();
+    public abstract boolean canEdit();
 
-    public String getRole(){
-        return "USER";
-    }
 
-    public boolean canEdit(){
-        return false;
-    }
 }
