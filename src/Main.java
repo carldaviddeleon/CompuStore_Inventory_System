@@ -1,4 +1,4 @@
-import gui.LoginFrame;
+    import gui.LoginFrame;
 
 public class Main {
 

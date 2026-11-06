@@ -380,8 +380,8 @@ public class ProductFrame extends JFrame implements ActionListener {
                 Style.warn(this, "Price must be greater than 0 (no zero or negative numbers)");
                 return false;
             }
-            if(price > 1000000){
-                Style.warn(this, "Price is too high. The maximum is 1,000,000");
+            if(price > 100000){
+                Style.warn(this, "Price is too high. The maximum is 100,000");
                 return false;
             }
         }catch(NumberFormatException e){
